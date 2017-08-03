@@ -3,6 +3,9 @@
 import gensim
 import math
 from copy import copy
+from math import*
+
+vocabsize=5000
 
 '''
 (f) helper class, do not modify.
@@ -39,6 +42,33 @@ class BncSentences:
 					if pos == "j":
 						pos = "a"
 					ret.append(gensim.utils.any2unicode(word + "." + pos))
+'''
+This is a help function to create a full array from a sparse one
+'''
+def convert_sparse_to_full(vector1):
+	temp_vector1 = [0] * vocabsize
+
+	for indx, value in vector1:
+		temp_vector1[indx] = value
+
+	return temp_vector1
+
+'''
+Sometimes even full arrays don't have correct dimentioin.
+So, with this help function they are made ready for further proccessing.
+'''
+def convert_full_to_full(vector1):
+	temp_vector1 = [0] * vocabsize
+
+	for indx, value in enumerate(vector1):
+		temp_vector1[indx] = value
+
+	return temp_vector1
+
+
+
+def square_rooted(x):
+	return sqrt(sum([a * a for a in x]))
 
 '''
 (a) function load_corpus to read a corpus from disk
@@ -61,7 +91,7 @@ def load_corpus(vocabFile, contextFile):
 		for lines in c:
 			qq= qq+1
 			tokens = lines.strip().split()
-			temp = [0] * 5000
+			temp = [0] * vocabsize
 			for counts in  tokens[1:]:
 				indx, cou = counts.split(":")
 				temp[int(indx)] = cou
@@ -76,8 +106,21 @@ output: cosine similarity between vector1 and vector2 as a real number
 '''
 def cosine_similarity(vector1, vector2):
 	# your code here
-	
-	return None
+	temp1=[]
+	temp2=[]
+	if isinstance(vector1[0],int):
+		temp1 = convert_full_to_full(vector1)
+	else:
+		temp1 = convert_sparse_to_full(vector1)
+
+	if isinstance(vector2[0],int):
+		temp2 = convert_full_to_full(vector2)
+	else:
+		temp2 = convert_sparse_to_full(vector2)
+
+	numerator = sum(a * b for a, b in zip(temp1, temp2))
+	denominator = square_rooted(temp1) * square_rooted(temp2)
+	return (numerator / denominator)
 
 '''
 (d) function tf_idf to turn existing frequency-based vector model into tf-idf-based vector model
