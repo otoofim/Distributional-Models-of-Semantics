@@ -7,8 +7,8 @@ The data consists of the 20,000 most frequent words in the British National Corp
 
 The answer for part C question 1 :
 
-The similarity between 'house' and 'home' is : 0.812743856464 \n
-The similarity between 'house' and 'time' is : 0.82359219053  \n
-The similarity between 'home' and 'time' is : 0.818144793373 \n
+The similarity between 'house' and 'home' is : 0.812743856464 
+The similarity between 'house' and 'time' is : 0.82359219053  
+The similarity between 'home' and 'time' is : 0.818144793373 
 
 The result is frustrating, This model doesn’t reflect the similarity meaning between ‘house’ and ‘home’.
