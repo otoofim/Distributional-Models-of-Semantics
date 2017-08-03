@@ -52,9 +52,20 @@ def load_corpus(vocabFile, contextFile):
 	id2word = {}
 	word2id = {}
 	vectors = []
-	
+	qq=0
 	# your code here
-	
+	with open(vocabFile) as v, open (contextFile) as c:
+		for idx,line in enumerate(v):
+			word2id[line.strip()] = int(idx)
+			id2word[int(idx)] = line.strip()
+		for lines in c:
+			qq= qq+1
+			tokens = lines.strip().split()
+			temp = [0] * 5000
+			for counts in  tokens[1:]:
+				indx, cou = counts.split(":")
+				temp[int(indx)] = cou
+			vectors.append(temp)
 	return id2word, word2id, vectors
 
 '''
