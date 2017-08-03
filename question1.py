@@ -47,9 +47,8 @@ This is a help function to create a full array from a sparse one
 '''
 def convert_sparse_to_full(vector1):
 	temp_vector1 = [0] * vocabsize
-
 	for indx, value in vector1:
-		temp_vector1[indx] = value
+		temp_vector1[int(indx)] = int(value)
 
 	return temp_vector1
 
@@ -61,7 +60,7 @@ def convert_full_to_full(vector1):
 	temp_vector1 = [0] * vocabsize
 
 	for indx, value in enumerate(vector1):
-		temp_vector1[indx] = value
+		temp_vector1[int(indx)] = int(value)
 
 	return temp_vector1
 
@@ -108,18 +107,19 @@ def cosine_similarity(vector1, vector2):
 	# your code here
 	temp1=[]
 	temp2=[]
-	if isinstance(vector1[0],int):
+	if isinstance(vector1[0],str):
 		temp1 = convert_full_to_full(vector1)
 	else:
 		temp1 = convert_sparse_to_full(vector1)
 
-	if isinstance(vector2[0],int):
+	if isinstance(vector2[0],str):
 		temp2 = convert_full_to_full(vector2)
 	else:
 		temp2 = convert_sparse_to_full(vector2)
 
 	numerator = sum(a * b for a, b in zip(temp1, temp2))
 	denominator = square_rooted(temp1) * square_rooted(temp2)
+
 	return (numerator / denominator)
 
 '''
@@ -234,8 +234,15 @@ if __name__ == '__main__':
 	# you may complete this part to get answers for part c (similarity in frequency space)
 	if part == "c":
 		print("(c) similarity of house, home and time in frequency space")
-		
-		# your code here
+		id2word, word2id, vectors = load_corpus(sys.argv[2], sys.argv[3])
+		house_id = word2id["house.n"]
+		home_id = word2id["home.n"]
+		time_id = word2id["time.n"]
+		print("The similarity between 'house' and 'home' is : {0}".format(cosine_similarity(vectors[house_id],vectors[home_id])))
+		print("The similarity between 'house' and 'time' is : {0}".format(cosine_similarity(vectors[house_id], vectors[time_id])))
+		print("The similarity between 'home' and 'time' is : {0}".format(cosine_similarity(vectors[home_id], vectors[time_id])))
+
+	# your code here
 	
 	# this gives you an indication whether your conversion into tf-idf space works.
 	# this does not test for vector values in tf-idf space, hence can't tell you whether tf-idf has been implemented correctly
