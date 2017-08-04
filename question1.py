@@ -107,12 +107,13 @@ def cosine_similarity(vector1, vector2):
 	# your code here
 	temp1=[]
 	temp2=[]
-	if isinstance(vector1[0],str):
+
+	if not isinstance(vector1[0], tuple):
 		temp1 = convert_full_to_full(vector1)
 	else:
 		temp1 = convert_sparse_to_full(vector1)
 
-	if isinstance(vector2[0],str):
+	if not isinstance(vector2[0], tuple):
 		temp2 = convert_full_to_full(vector2)
 	else:
 		temp2 = convert_sparse_to_full(vector2)
@@ -131,7 +132,27 @@ def tf_idf(freqVectors):
 	tfIdfVectors = []
 	
 	# your code here
-	
+	freqVectorsFull = []
+	dfi = [0] * vocabsize
+	for vectors in freqVectors:
+
+		fullVector = convert_full_to_full(vectors)
+
+		freqVectorsFull.append(fullVector)
+		for worindx, freq in enumerate(fullVector):
+			if freq > 0:
+				dfi[worindx] += 1
+	N = len(freqVectors)
+	for vectors in freqVectorsFull:
+		temp = []
+		for indx, freq in enumerate(vectors):
+			if freq > 0:
+				temp.append((1 + math.log(freq, 2)) * (1 + math.log((N / dfi[indx]), 2)))
+			else:
+				temp.append(0)
+		tfIdfVectors.append(temp)
+
+
 	return tfIdfVectors
 
 '''
@@ -233,6 +254,8 @@ if __name__ == '__main__':
 
 	# you may complete this part to get answers for part c (similarity in frequency space)
 	if part == "c":
+		# your code here
+
 		print("(c) similarity of house, home and time in frequency space")
 		id2word, word2id, vectors = load_corpus(sys.argv[2], sys.argv[3])
 		house_id = word2id["house.n"]
@@ -242,8 +265,7 @@ if __name__ == '__main__':
 		print("The similarity between 'house' and 'time' is : {0}".format(cosine_similarity(vectors[house_id], vectors[time_id])))
 		print("The similarity between 'home' and 'time' is : {0}".format(cosine_similarity(vectors[home_id], vectors[time_id])))
 
-	# your code here
-	
+
 	# this gives you an indication whether your conversion into tf-idf space works.
 	# this does not test for vector values in tf-idf space, hence can't tell you whether tf-idf has been implemented correctly
 	if part == "d":
