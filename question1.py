@@ -286,7 +286,15 @@ if __name__ == '__main__':
 		print("(e) similarity of house, home and time in tf-idf space")
 		
 		# your code here
-	
+		id2word, word2id, vectors = load_corpus(sys.argv[2], sys.argv[3])
+		tfIdfSpace = tf_idf(vectors)
+		house_id = word2id["house.n"]
+		home_id = word2id["home.n"]
+		time_id = word2id["time.n"]
+		print("The similarity between 'house' and 'home' is : {0}".format(cosine_similarity(tfIdfSpace[house_id], tfIdfSpace[home_id])))
+		print("The similarity between 'house' and 'time' is : {0}".format(cosine_similarity(tfIdfSpace[house_id], tfIdfSpace[time_id])))
+		print("The similarity between 'home' and 'time' is : {0}".format(cosine_similarity(tfIdfSpace[home_id], tfIdfSpace[time_id])))
+
 	# you may complete this part for the first part of f (estimating best learning rate, sample rate and negative samplings)
 	if part == "f1":
 		print("(f1) word2vec, estimating best learning rate, sample rate, negative sampling")
